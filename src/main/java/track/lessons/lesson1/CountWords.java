@@ -1,6 +1,10 @@
 package track.lessons.lesson1;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
 /**
  * Задание 1: Реализовать два метода
@@ -31,7 +35,35 @@ public class CountWords {
      * @return - целое число - сумма всех чисел из файла
      */
     public long countNumbers(File file) throws Exception {
-        return 0;
+        BufferedReader reader = null;
+        int rezultInt = 0;
+
+        try {
+            reader = new BufferedReader(new FileReader(file));
+            String text = null;
+
+            while ((text = reader.readLine()) != null) {
+                try {
+                    int foo = Integer.parseInt(text);
+                    rezultInt += foo;
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (reader != null) {
+                    reader.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        return rezultInt;
     }
 
 
@@ -43,7 +75,41 @@ public class CountWords {
      * @return - результирующая строка
      */
     public String concatWords(File file) throws Exception {
-        return null;
+
+        BufferedReader reader = null;
+        StringBuilder builder = new StringBuilder("");
+
+        try {
+            reader = new BufferedReader(new FileReader(file));
+            String text = null;
+
+            while ((text = reader.readLine()) != null) {
+                if (text.length() == 0) {
+                    continue;
+                }
+                try {
+                    int foo = Integer.parseInt(text);
+                } catch (NumberFormatException e) {
+                    if (builder.toString().equals("")) {
+                        builder.append(text);
+                    } else {
+                        builder.append(" ").append(text);
+                    }
+                }
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (reader != null) {
+                    reader.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return builder.toString();
     }
 
 }
