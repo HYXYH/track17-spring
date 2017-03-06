@@ -27,6 +27,9 @@ import java.io.IOException;
  */
 public class CountWords {
 
+    private int resultInt;
+    private String resultStr;
+
     /**
      * Метод на вход принимает объект File, изначально сумма = 0
      * Нужно пройти по всем строкам файла, и если в строке стоит целое число,
@@ -35,35 +38,8 @@ public class CountWords {
      * @return - целое число - сумма всех чисел из файла
      */
     public long countNumbers(File file) throws Exception {
-        BufferedReader reader = null;
-        int rezultInt = 0;
-
-        try {
-            reader = new BufferedReader(new FileReader(file));
-            String text = null;
-
-            while ((text = reader.readLine()) != null) {
-                try {
-                    int foo = Integer.parseInt(text);
-                    rezultInt += foo;
-                } catch (NumberFormatException e) {
-                    e.printStackTrace();
-                }
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (reader != null) {
-                    reader.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-
-        return rezultInt;
+        processFile(file);
+        return resultInt;
     }
 
 
@@ -75,9 +51,16 @@ public class CountWords {
      * @return - результирующая строка
      */
     public String concatWords(File file) throws Exception {
+        processFile(file);
+        return resultStr;
+    }
+
+
+    private void processFile(File file)  throws Exception  {
 
         BufferedReader reader = null;
         StringBuilder builder = new StringBuilder("");
+        resultInt = 0;
 
         try {
             reader = new BufferedReader(new FileReader(file));
@@ -89,6 +72,7 @@ public class CountWords {
                 }
                 try {
                     int foo = Integer.parseInt(text);
+                    resultInt += foo;
                 } catch (NumberFormatException e) {
                     if (builder.toString().equals("")) {
                         builder.append(text);
@@ -109,7 +93,7 @@ public class CountWords {
             }
         }
 
-        return builder.toString();
+        resultStr = builder.toString();
     }
 
 }
