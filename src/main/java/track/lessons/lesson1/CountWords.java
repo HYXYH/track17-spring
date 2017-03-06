@@ -27,7 +27,7 @@ import java.io.IOException;
  */
 public class CountWords {
 
-    private int resultInt;
+    private long resultLong;
     private String resultStr;
 
     /**
@@ -39,7 +39,7 @@ public class CountWords {
      */
     public long countNumbers(File file) throws Exception {
         processFile(file);
-        return resultInt;
+        return resultLong;
     }
 
 
@@ -60,7 +60,7 @@ public class CountWords {
 
         BufferedReader reader = null;
         StringBuilder builder = new StringBuilder("");
-        resultInt = 0;
+        resultLong = 0;
 
         try {
             reader = new BufferedReader(new FileReader(file));
@@ -71,8 +71,8 @@ public class CountWords {
                     continue;
                 }
                 try {
-                    int foo = Integer.parseInt(text);
-                    resultInt += foo;
+                    long foo = Integer.parseInt(text);
+                    resultLong += foo;
                 } catch (NumberFormatException e) {
                     if (builder.toString().equals("")) {
                         builder.append(text);
