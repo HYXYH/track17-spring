@@ -44,7 +44,7 @@ public class MyArrayList extends List {
             throw new NoSuchElementException();
         }
 
-        int val = array[idx];
+        final int val = array[idx];
         if (mySize - 1 - idx > 0) {
             arraycopy(array, idx + 1, array, idx, mySize - 1 - idx);
         }
