@@ -29,7 +29,7 @@ public class MyArrayList extends List {
     }
 
     @Override
-    void add(int item) {
+    public void add(int item) {
         if (myCapacity == mySize) {
             myCapacity *= 2;
             realloc();
@@ -39,7 +39,7 @@ public class MyArrayList extends List {
     }
 
     @Override
-    int remove(int idx) throws NoSuchElementException {
+    public int remove(int idx) throws NoSuchElementException {
         if (idx < 0 || idx >= mySize) {
             throw new NoSuchElementException();
         }
@@ -57,7 +57,7 @@ public class MyArrayList extends List {
     }
 
     @Override
-    int get(int idx) throws NoSuchElementException {
+    public int get(int idx) throws NoSuchElementException {
         if (idx < 0 || idx >= mySize) {
             throw new NoSuchElementException();
         }

@@ -51,7 +51,7 @@ public class MyLinkedList extends List implements Stack, Queue  {
     }
 
     @Override
-    void add(int item) {
+    public void add(int item) {
         if (mySize == 0) {
             head = new Node(null, null, item);
             tail = head;
@@ -63,7 +63,7 @@ public class MyLinkedList extends List implements Stack, Queue  {
     }
 
     @Override
-    int remove(int idx) throws NoSuchElementException {
+    public int remove(int idx) throws NoSuchElementException {
         if (idx < 0 || idx >= mySize) {
             throw new NoSuchElementException();
         } else {
@@ -87,7 +87,7 @@ public class MyLinkedList extends List implements Stack, Queue  {
     }
 
     @Override
-    int get(int idx) throws NoSuchElementException {
+    public int get(int idx) throws NoSuchElementException {
         if (idx < 0 || idx >= mySize) {
             throw new NoSuchElementException();
         } else {
