@@ -80,4 +80,10 @@ public class MyArrayListTest {
 
         Assert.assertTrue(list.size() == 0);
     }
+
+    @Test(expected = NoSuchElementException.class)
+    public void listRemove2() throws Exception {
+        List list = new MyArrayList(0);
+        list.remove(0);
+    }
 }
