@@ -6,7 +6,31 @@ import java.util.NoSuchElementException;
  * Должен наследовать List
  * Односвязный список
  */
-public class MyLinkedList extends List {
+public class MyLinkedList extends List implements Stack, Queue  {
+
+    private Node head = null;
+    private Node tail = null;
+
+    @Override
+    public void push(int value) {
+        add(value);
+    }
+
+    @Override
+    public int pop() {
+        return remove(mySize - 1);
+    }
+
+    @Override
+    public void enqueue(int value) {
+        add(value);
+    }
+
+    @Override
+    public int dequeue() {
+        return remove(0);
+    }
+
 
     /**
      * private - используется для сокрытия этого класса от других.
@@ -27,21 +51,52 @@ public class MyLinkedList extends List {
     }
 
     @Override
-    void add(int item) {
+    public void add(int item) {
+        if (mySize == 0) {
+            head = new Node(null, null, item);
+            tail = head;
+        } else {
+            tail.next = new Node(tail, null, item);
+            tail = tail.next;
+        }
+        mySize++;
     }
 
     @Override
-    int remove(int idx) throws NoSuchElementException {
-        return 0;
+    public int remove(int idx) throws NoSuchElementException {
+        if (idx < 0 || idx >= mySize) {
+            throw new NoSuchElementException();
+        } else {
+            Node nodeToDelete = head;
+            for (int i = 0; i < idx; i++) {
+                nodeToDelete = nodeToDelete.next;
+            }
+
+            if (nodeToDelete == head) {
+                head = head.next;
+            } else {
+                nodeToDelete.prev.next = nodeToDelete.next;
+            }
+
+            if (nodeToDelete == tail) {
+                tail = tail.prev;
+            }
+            mySize--;
+            return nodeToDelete.val;
+        }
     }
 
     @Override
-    int get(int idx) throws NoSuchElementException {
-        return 0;
+    public int get(int idx) throws NoSuchElementException {
+        if (idx < 0 || idx >= mySize) {
+            throw new NoSuchElementException();
+        } else {
+            Node nodeToDelete = head;
+            for (int i = 0; i < idx; i++) {
+                nodeToDelete = nodeToDelete.next;
+            }
+            return nodeToDelete.val;
+        }
     }
 
-    @Override
-    int size() {
-        return 0;
-    }
 }
