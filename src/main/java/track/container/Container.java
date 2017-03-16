@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.sun.xml.internal.ws.util.StringUtils;
 import track.container.config.Bean;
 import track.container.config.Property;
 import track.container.config.ValueType;
@@ -117,9 +116,10 @@ public class Container {
     }
 
     private Method getSetterFor(Method[] methods, String paramName) throws GetBeanException {
+        paramName = paramName.substring(0, 1).toUpperCase() + paramName.substring(1);
         for (Method method : methods) {
             String name = method.getName();
-            if (name.startsWith("set") && name.equalsIgnoreCase("set" + StringUtils.capitalize(paramName))) {
+            if (name.startsWith("set") && name.equalsIgnoreCase("set" + paramName)) {
                 return method;
             }
         }
