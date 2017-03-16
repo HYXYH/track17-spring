@@ -25,6 +25,11 @@ public class Bean {
         this.properties = properties;
     }
 
+    //Обязательно нужен пустой конструктор для сериализации из json
+    public Bean() {
+
+    }
+
     public Map<String, Property> getProperties() {
         return properties;
     }

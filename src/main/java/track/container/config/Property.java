@@ -15,6 +15,11 @@ public class Property {
         this.type = type;
     }
 
+    //Обязательно нужен пустой конструктор для сериализации из json
+    public Property() {
+
+    }
+
     public String getName() {
         return name;
     }

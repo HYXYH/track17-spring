@@ -1,19 +1,46 @@
 package track.container;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import track.container.config.Bean;
 import track.container.config.ConfigReader;
 import track.container.config.InvalidConfigurationException;
 
-/**
- * TODO: Реализовать
- */
+
 public class JsonConfigReader implements ConfigReader {
 
     @Override
     public List<Bean> parseBeans(File configFile) throws InvalidConfigurationException {
-        return null;
+        Root root;
+        ObjectMapper mapper = new ObjectMapper();
+
+        try {
+            root = mapper.readValue(configFile, Root.class);
+        } catch (IOException e) {
+            throw new InvalidConfigurationException(e.getMessage());
+        }
+        return root.getBeans();
     }
+
+}
+
+class Root {
+    private List<Bean> beans;
+
+    //Обязательно нужен пустой конструктор для сериализации из json
+    public Root() {
+    }
+
+    public List<Bean> getBeans() {
+        return beans;
+    }
+
+    public void setBeans(List<Bean> beans) {
+        this.beans = beans;
+    }
+
 }
