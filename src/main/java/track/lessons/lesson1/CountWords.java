@@ -1,6 +1,10 @@
 package track.lessons.lesson1;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
 /**
  * Задание 1: Реализовать два метода
@@ -23,6 +27,9 @@ import java.io.File;
  */
 public class CountWords {
 
+    private long resultLong;
+    private String resultStr;
+
     /**
      * Метод на вход принимает объект File, изначально сумма = 0
      * Нужно пройти по всем строкам файла, и если в строке стоит целое число,
@@ -31,7 +38,8 @@ public class CountWords {
      * @return - целое число - сумма всех чисел из файла
      */
     public long countNumbers(File file) throws Exception {
-        return 0;
+        processFile(file);
+        return resultLong;
     }
 
 
@@ -43,7 +51,49 @@ public class CountWords {
      * @return - результирующая строка
      */
     public String concatWords(File file) throws Exception {
-        return null;
+        processFile(file);
+        return resultStr;
+    }
+
+
+    private void processFile(File file)  throws Exception  {
+
+        BufferedReader reader = null;
+        StringBuilder builder = new StringBuilder("");
+        resultLong = 0;
+
+        try {
+            reader = new BufferedReader(new FileReader(file));
+            String text = null;
+
+            while ((text = reader.readLine()) != null) {
+                if (text.length() == 0) {
+                    continue;
+                }
+                try {
+                    long foo = Integer.parseInt(text);
+                    resultLong += foo;
+                } catch (NumberFormatException e) {
+                    if (builder.toString().equals("")) {
+                        builder.append(text);
+                    } else {
+                        builder.append(" ").append(text);
+                    }
+                }
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (reader != null) {
+                    reader.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        resultStr = builder.toString();
     }
 
 }
