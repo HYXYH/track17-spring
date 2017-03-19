@@ -1,5 +1,6 @@
 package track.container;
 
+import org.apache.commons.lang3.StringUtils;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -116,7 +117,7 @@ public class Container {
     }
 
     private Method getSetterFor(Method[] methods, String paramName) throws GetBeanException {
-        paramName = paramName.substring(0, 1).toUpperCase() + paramName.substring(1);
+        paramName = StringUtils.capitalize(paramName);
         for (Method method : methods) {
             String name = method.getName();
             if (name.startsWith("set") && name.equalsIgnoreCase("set" + paramName)) {

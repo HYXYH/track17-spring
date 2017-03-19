@@ -13,7 +13,6 @@ import track.container.config.InvalidConfigurationException;
 
 import java.io.File;
 
-//тесты частично спёр
 
 public class ContainerTest {
 
@@ -30,7 +29,7 @@ public class ContainerTest {
         void callback() throws Exception;
     }
 
-    private void assertNotException(Callback callback) {
+    private void assertNoException(Callback callback) {
         try {
             callback.callback();
         } catch (Exception e) {
@@ -42,11 +41,11 @@ public class ContainerTest {
     @Test
     public void readJson() {
         ConfigReader reader = new JsonConfigReader();
-        assertNotException(() -> reader.parseBeans(new File(DEFAULT_PATH)));
+        assertNoException(() -> reader.parseBeans(new File(DEFAULT_PATH)));
     }
 
-    @Test
-    public void readJsonFail() throws InvalidConfigurationException {
+    @Test(expected = InvalidConfigurationException.class)
+    public void readInvalidJson() throws InvalidConfigurationException {
         ConfigReader reader = new JsonConfigReader();
         reader.parseBeans(new File(DEFAULT_FAIL_PATH));
     }
@@ -57,7 +56,7 @@ public class ContainerTest {
         final int ENGINE_POWER = 200;
 
         ConfigReader reader = new JsonConfigReader();
-        assertNotException(() -> {
+        assertNoException(() -> {
             Container container = new Container(reader.parseBeans(new File(DEFAULT_PATH)));
             Engine engine = (Engine) container.getById(ENGINE_BEAN);
             Assert.assertEquals(engine.getPower(), ENGINE_POWER);
@@ -69,7 +68,7 @@ public class ContainerTest {
         final int GEAR_COUNT = 6;
 
         ConfigReader reader = new JsonConfigReader();
-        assertNotException(() -> {
+        assertNoException(() -> {
             Container container = new Container(reader.parseBeans(new File(DEFAULT_PATH)));
             Gear gear = (Gear) container.getById(GEAR_BEAN);
             Assert.assertEquals(gear.getCount(), GEAR_COUNT);
@@ -81,7 +80,7 @@ public class ContainerTest {
     public void GetCar() {
         ConfigReader reader = new JsonConfigReader();
 
-        assertNotException(() -> {
+        assertNoException(() -> {
             Container container = new Container(reader.parseBeans(new File(DEFAULT_PATH)));
             Car car = (Car) container.getById(CAR_BEAN);
             Engine engine = (Engine) container.getById(ENGINE_BEAN);
