@@ -10,7 +10,7 @@ import java.util.NoSuchElementException;
  * - с аргументом - начальный размер массива
  */
 public class MyArrayList extends List {
-    static final int DEFAULT_CAPACITY = 8;
+    public static final int DEFAULT_CAPACITY = 8;
     private int myCapacity;
     private int[] array;
 
