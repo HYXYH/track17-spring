@@ -33,9 +33,11 @@ public class Util {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < data.length(); i++) {
             if (data.charAt(i) == ' ') {
-                continue;
+//                continue;
+                builder.append(" ");
+            } else {
+                builder.append(shift(data.charAt(i), SHIFT));
             }
-            builder.append(shift(data.charAt(i), SHIFT));
         }
         return builder.toString();
     }

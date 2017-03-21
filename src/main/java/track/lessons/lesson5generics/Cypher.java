@@ -1,12 +1,14 @@
 package track.lessons.lesson5generics;
 
+import track.util.Util;
+
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
-import track.util.Util;
 
 /**
  *
@@ -24,7 +26,11 @@ public class Cypher {
                     ch += SYMBOL_DIST;
                 }
                 // Если это буква, то собираем частотную информацию
-
+                if (map.containsKey(ch)) {
+                    map.put(ch, map.get(ch) + 1);
+                } else {
+                    map.put(ch, 1);
+                }
 
 
             }
@@ -47,8 +53,13 @@ public class Cypher {
      */
     public Map<Character, Integer> buildHist(String data) {
         Map<Character, Integer> map = readData(data);
-
-        return null;
+        ArrayList<Map.Entry<Character, Integer>> sorted = new ArrayList<Map.Entry<Character, Integer>>(map.entrySet());
+        sorted.sort(Comparator.comparingInt(Map.Entry::getValue));
+        map = new LinkedHashMap<Character, Integer>();
+        for (Map.Entry<Character, Integer> pair : sorted) {
+            map.put(pair.getKey(), pair.getValue());
+        }
+        return map;
     }
 
     /**
@@ -60,7 +71,27 @@ public class Cypher {
      * @return расшифрованный текст
      */
     public String merge(List<Character> in, List<Character> out, String encrypted) {
-        return null;
+        StringBuilder builder = new StringBuilder("");
+        for (int i = 0; i < encrypted.length(); i++) {
+            if (encrypted.charAt(i) == ' ') {
+                builder.append(" ");
+                continue;
+            }
+
+            int pos = 0;
+            for (Character c : out) {
+                pos++;
+                if (c.compareTo(encrypted.charAt(i)) == 0) {
+                    break;
+                }
+            }
+            if (pos >= in.size()) {
+                builder.append(" ");
+            } else {
+                builder.append(in.get(pos));
+            }
+        }
+        return builder.toString();
     }
 
     public static void main(String[] args) {
