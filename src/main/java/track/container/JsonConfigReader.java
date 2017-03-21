@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import track.container.config.Bean;
 import track.container.config.ConfigReader;
 import track.container.config.InvalidConfigurationException;
+import track.container.config.Root;
 
 
 public class JsonConfigReader implements ConfigReader {
@@ -24,23 +25,6 @@ public class JsonConfigReader implements ConfigReader {
             throw new InvalidConfigurationException(e.getMessage());
         }
         return root.getBeans();
-    }
-
-}
-
-class Root {
-    private List<Bean> beans;
-
-    //Обязательно нужен пустой конструктор для сериализации из json
-    public Root() {
-    }
-
-    public List<Bean> getBeans() {
-        return beans;
-    }
-
-    public void setBeans(List<Bean> beans) {
-        this.beans = beans;
     }
 
 }
