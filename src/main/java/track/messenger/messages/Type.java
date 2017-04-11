@@ -5,6 +5,7 @@ package track.messenger.messages;
  */
 public enum Type {
     // Сообщения от клиента к серверу
+    MSG_REGISTER, // в ответ MSG_STATUS
     MSG_LOGIN, // в ответ MSG_STATUS
     MSG_TEXT, // в ответ MSG_STATUS
     MSG_INFO, // в ответ MSG_INFO_RESULT

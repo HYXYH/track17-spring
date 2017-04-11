@@ -34,6 +34,6 @@
 
 
     <!--Автоматически сканировать в поисках @Component -->
-    <!--<context:component-scan base-package="track.spring.server" />-->
+    <context:component-scan base-package="track.spring.server" />
 
 </beans>

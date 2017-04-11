@@ -5,7 +5,7 @@ import java.util.Objects;
 /**
  * Простое текстовое сообщение
  */
-public class TextMessage extends Message {
+public class TextMsg extends Message {
     private String text;
 
     public String getText() {
@@ -27,7 +27,7 @@ public class TextMessage extends Message {
         if (!super.equals(other)) {
             return false;
         }
-        TextMessage message = (TextMessage) other;
+        TextMsg message = (TextMsg) other;
         return Objects.equals(text, message.text);
     }
 

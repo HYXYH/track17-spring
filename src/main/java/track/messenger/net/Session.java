@@ -1,9 +1,7 @@
 package track.messenger.net;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.Socket;
+import java.nio.channels.SocketChannel;
 
 import track.messenger.User;
 import track.messenger.messages.Message;
@@ -22,16 +20,21 @@ public class Session {
     private User user;
 
     // сокет на клиента
-    private Socket socket;
+    private SocketChannel socketChannel;
 
-    /**
-     * С каждым сокетом связано 2 канала in/out
-     */
-    private InputStream in;
-    private OutputStream out;
+
+    public Session(SocketChannel socketChannel) {
+        this.socketChannel = socketChannel;
+    }
 
     public void send(Message msg) throws ProtocolException, IOException {
         // TODO: Отправить клиенту сообщение
+    }
+
+    public boolean receive() throws IOException  {
+
+
+        return false;
     }
 
     public void onMessage(Message msg) {

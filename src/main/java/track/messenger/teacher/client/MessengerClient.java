@@ -1,6 +1,5 @@
 package track.messenger.teacher.client;
 
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -12,7 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import track.messenger.messages.Message;
-import track.messenger.messages.TextMessage;
+import track.messenger.messages.TextMsg;
 import track.messenger.messages.Type;
 import track.messenger.net.Protocol;
 import track.messenger.net.ProtocolException;
@@ -24,6 +23,14 @@ import track.messenger.net.StringProtocol;
  */
 public class MessengerClient {
 
+    private String helpInfo =
+            "\n/register <логин_пользователя> <пароль> <информация о пользователе>  - создать пользователя" +
+            "\n/login <логин_пользователя> <пароль>  - залогиниться (если логин не указан, то авторизоваться)." +
+            "\n/info [id] - получить всю информацию о пользователе, без аргументов - о себе (только для залогиненных пользователей)." +
+            "\n/chat_list - получить список чатов пользователя(только для залогиненных пользователей)." +
+            "\n/chat_create <user_id list> - создать новый чат, список пользователей приглашенных в чат (только для залогиненных пользователей)." +
+            "\n/chat_history <chat_id> - список сообщений из указанного чата (только для залогиненных пользователей)" +
+            "\n/text <id> <message> - отправить сообщение в заданный чат, чат должен быть в списке чатов пользователя (только для залогиненных пользователей)";
 
     /**
      * Механизм логирования позволяет более гибко управлять записью данных в лог (консоль, файл и тд)
@@ -120,11 +127,11 @@ public class MessengerClient {
                 // TODO: реализация
                 break;
             case "/help":
-                // TODO: реализация
+                System.out.print(helpInfo);
                 break;
             case "/text":
                 // FIXME: пример реализации для простого текстового сообщения
-                TextMessage sendMessage = new TextMessage();
+                TextMsg sendMessage = new TextMsg();
                 sendMessage.setType(Type.MSG_TEXT);
                 sendMessage.setText(tokens[1]);
                 send(sendMessage);
@@ -132,7 +139,7 @@ public class MessengerClient {
             // TODO: implement another types from wiki
 
             default:
-                log.error("Invalid input: " + line);
+                log.error("Invalid input: " + line + "\n print /help for usage info.");
         }
     }
 

@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import track.messenger.messages.Message;
-import track.messenger.messages.TextMessage;
+import track.messenger.messages.TextMsg;
 import track.messenger.messages.Type;
 
 /**
@@ -24,7 +24,7 @@ public class StringProtocol implements Protocol {
         Type type = Type.valueOf(tokens[0]);
         switch (type) {
             case MSG_TEXT:
-                TextMessage textMsg = new TextMessage();
+                TextMsg textMsg = new TextMsg();
                 textMsg.setSenderId(parseLong(tokens[1]));
                 textMsg.setText(tokens[2]);
                 textMsg.setType(type);
@@ -41,7 +41,7 @@ public class StringProtocol implements Protocol {
         builder.append(type).append(DELIMITER);
         switch (type) {
             case MSG_TEXT:
-                TextMessage sendMessage = (TextMessage) msg;
+                TextMsg sendMessage = (TextMsg) msg;
                 builder.append(String.valueOf(sendMessage.getSenderId())).append(DELIMITER);
                 builder.append(sendMessage.getText()).append(DELIMITER);
                 break;
