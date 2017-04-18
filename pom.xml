@@ -65,7 +65,7 @@
                 </dependencies>
                 <executions>
                     <execution>
-                        <id>checkstyle</id>
+                        <searchId>checkstyle</searchId>
                         <phase>validate</phase>
                         <goals>
                             <goal>check</goal>
@@ -99,7 +99,7 @@
                 <version>2.4</version>
                 <executions>
                     <execution>
-                        <id>package-jar</id>
+                        <searchId>package-jar</searchId>
                         <phase>package</phase>
                         <goals>
                             <goal>jar</goal>
@@ -242,6 +242,13 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-orm</artifactId>
             <version>${spring.version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.xerial</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
+            <version>3.16.1</version>
         </dependency>
 
 

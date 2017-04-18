@@ -6,9 +6,9 @@
 
     <!-- 1) Пример конфигурации бина -->
 
-    <!--<bean id="messageHandler" class="track.spring.server.MessageHandler"/>-->
+    <!--<bean searchId="messageHandler" class="track.spring.server.MessageHandler"/>-->
 
-    <!--<bean id="socketServer" class="track.spring.server.SocketServer" init-method="init">-->
+    <!--<bean searchId="socketServer" class="track.spring.server.SocketServer" init-method="init">-->
         <!--<property name="handler" ref="messageHandler"/>-->
         <!--<property name="port" value="19000"/>-->
         <!--<property name="poolSize" value="20"/>-->
@@ -17,7 +17,7 @@
 
     <!-- 2) Отдельно вынесенные настройки -->
 
-    <!--<bean id="socketServer" class="track.spring.server.SocketServer">-->
+    <!--<bean searchId="socketServer" class="track.spring.server.SocketServer">-->
         <!--<property name="handler" ref="messageHandler"/>-->
         <!--<property name="port" value="${port}"/>-->
         <!--<property name="poolSize" value="${poolSize}"/>-->

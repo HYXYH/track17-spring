@@ -1,10 +1,18 @@
 package track.messenger.messages;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 import java.io.Serializable;
 
 /**
  *
  */
+
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.MINIMAL_CLASS,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "@class")
 public abstract class Message implements Serializable {
 
     private Long id;
@@ -15,8 +23,8 @@ public abstract class Message implements Serializable {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setId(Long searchId) {
+        this.id = searchId;
     }
 
     public Long getSenderId() {
@@ -33,5 +41,14 @@ public abstract class Message implements Serializable {
 
     public void setType(Type type) {
         this.type = type;
+    }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "id=" + id +
+                ", senderId=" + senderId +
+                ", type=" + type +
+                '}';
     }
 }

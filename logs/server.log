@@ -1,0 +1,18 @@
+2017-04-18 12:37:26 DEBUG MessengerServer:66 - POST_CONSTRUCT
+2017-04-18 12:37:26 DEBUG MessengerServer:67 - Init server on port: 19000
+2017-04-18 12:37:26 DEBUG MessengerServer:68 - PoolSize: 4
+
+2017-04-18 12:37:35 DEBUG MessengerServer:135 - New connections: 1
+2017-04-18 12:37:35 DEBUG MessengerServer:144 - Got connection from Socket[addr=/127.0.0.1,port=49505,localport=19000]
+2017-04-18 12:37:40 DEBUG MessengerServer:135 - New connections: 1
+2017-04-18 12:37:41 DEBUG MessengerServer:80 - Recieved 94 bytes from /127.0.0.1:49505: {"@class":".LoginMsg","login":"a","password":"a","id":null,"senderId":null,"type":"MSG_LOGIN"}
+2017-04-18 12:37:41 INFO  MessengerServer:28 - Logging in: a
+2017-04-18 12:37:41 DEBUG MessengerServer:66 - Sending 122 bytes: {"@class":".StatusMsg","status":true,"statusMessage":"Success login as 'a'","id":null,"senderId":null,"type":"MSG_STATUS"}
+2017-04-18 12:37:45 DEBUG MessengerServer:135 - New connections: 1
+2017-04-18 12:37:45 DEBUG MessengerServer:80 - Recieved 85 bytes from /127.0.0.1:49505: {"@class":".ChatHistMsg","chatId":0,"id":null,"senderId":null,"type":"MSG_CHAT_HIST"}
+2017-04-18 12:37:45 INFO  MessengerServer:35 - Getting chat history for: a
+2017-04-18 12:37:45 DEBUG MessengerServer:39 - messagesIds: [1, 2, 3]
+2017-04-18 12:37:45 DEBUG MessengerServer:42 - Searching message with id: 1
+2017-04-18 12:37:45 DEBUG MessengerServer:42 - Searching message with id: 2
+2017-04-18 12:37:45 DEBUG MessengerServer:42 - Searching message with id: 3
+2017-04-18 12:37:45 DEBUG MessengerServer:66 - Sending 196 bytes: {"@class":".ChatHistResultMsg","messages":["[0]a: Hello!","[0]a: Hello!","[0]a: Hello,Admin!"],"status":true,"statusMessage":"chat history","id":null,"senderId":null,"type":"MSG_CHAT_HIST_RESULT"}

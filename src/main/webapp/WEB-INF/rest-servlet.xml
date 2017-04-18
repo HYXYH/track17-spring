@@ -12,7 +12,7 @@
     <context:component-scan base-package="track.spring.controller"/>
 
     <!-- Откуда брать шаблоны для построения View (В данном случае это jsp страницы) -->
-    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver" >
+    <bean searchId="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver" >
         <property name="prefix">
             <value>/WEB-INF/views/jsp/</value>
         </property>

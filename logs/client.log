@@ -1,0 +1,7 @@
+2017-04-18 12:37:35 INFO  MessengerClient:94 - Starting listener thread...
+2017-04-18 12:37:40 DEBUG MessengerClient:130 - Tokens: [/login, a, a]
+2017-04-18 12:37:40 INFO  MessengerClient:267 - Sending to Server: LoginMsg{login='a', password='a', Base=Message{id=null, senderId=null, type=MSG_LOGIN}}
+2017-04-18 12:37:41 INFO  MessengerClient:120 - Message received: StatusMsg{status=true, statusMessage='Success login as 'a'', Base=Message{id=null, senderId=null, type=MSG_STATUS}}
+2017-04-18 12:37:43 DEBUG MessengerClient:130 - Tokens: [/chat_history, 0]
+2017-04-18 12:37:43 INFO  MessengerClient:267 - Sending to Server: ChatHistMsg{chatId=0, Base=Message{id=null, senderId=null, type=MSG_CHAT_HIST}}
+2017-04-18 12:37:45 INFO  MessengerClient:120 - Message received: ChatHistResultMsg{messages=[[0]a: Hello!, [0]a: Hello!, [0]a: Hello,Admin!], Base=StatusMsg{status=true, statusMessage='chat history', Base=Message{id=null, senderId=null, type=MSG_CHAT_HIST_RESULT}}}

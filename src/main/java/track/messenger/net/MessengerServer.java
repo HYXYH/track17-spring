@@ -4,6 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import track.messenger.database.DbManager;
+import track.messenger.database.MessageStore;
+import track.messenger.database.UserStore;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -17,8 +20,10 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -29,7 +34,7 @@ import java.util.concurrent.TimeUnit;
 
 @Component
 public class MessengerServer {
-    static Logger log = LoggerFactory.getLogger(MessengerServer.class);
+    public static Logger log;
 
     @Value("${port}")
     private int port;
@@ -37,11 +42,17 @@ public class MessengerServer {
     @Value("${poolSize}")
     private int poolSize;
 
+    public static UserStore userStore;
+
+    public static MessageStore messageStore;
+
+    private DbManager dbManager;
+
     private ExecutorService executor;
 
     private volatile boolean isRunning;
 
-    private Map<SocketChannel, Session> sessions;
+    private static Map<SocketChannel, Session> sessions;
 
     public MessengerServer() {
 
@@ -49,11 +60,25 @@ public class MessengerServer {
 
     @PostConstruct
     public void init() {
-        System.out.println("POST_CONSTRUCT");
-        System.out.println("Init server on port: " + port);
-        System.out.printf("PoolSize: " + poolSize + "\n");
-        sessions = new HashMap<SocketChannel, Session>();
+        System.setProperty("logfilename", "server");
+        log = LoggerFactory.getLogger(MessengerServer.class);
+
+        log.debug("POST_CONSTRUCT");
+        log.debug("Init server on port: " + port);
+        log.debug("PoolSize: " + poolSize + "\n");
+        sessions = new ConcurrentHashMap<SocketChannel, Session>();
         executor = Executors.newFixedThreadPool(poolSize);
+
+        dbManager = new DbManager();
+        dbManager.setUrl("/Users/Oskar/Desktop/Phystech/Technotrack/Java/messenger.sqlite");
+        try {
+            dbManager.init();
+        } catch (Exception e) {
+            log.error("Cannot init database manager", e);
+            System.exit(1);
+        }
+        userStore = new UserStore(dbManager);
+        messageStore = new MessageStore(dbManager);
     }
 
     public boolean isRunning() {
@@ -76,6 +101,10 @@ public class MessengerServer {
         this.poolSize = poolSize;
     }
 
+    public static Map<SocketChannel, Session> getSessions() {
+        return sessions;
+    }
+
     public void start() {
 
         isRunning = true;
@@ -96,18 +125,37 @@ public class MessengerServer {
 
             while (isRunning) {
 
-                int num = selector.select();
+                int num = selector.select(100);
                 if (num == 0) {
                     continue;
                 }
 
+
                 Set keys = selector.selectedKeys();
+                log.debug("New connections: " + keys.size());
+
 
                 for (Object key : keys) {
-                    executor.submit(new ConnectionHandler(ss, selector, (SelectionKey) key));
+                    SelectionKey selectionKey = (SelectionKey) key;
+
+                    if ((selectionKey.readyOps() & SelectionKey.OP_ACCEPT) == SelectionKey.OP_ACCEPT) {
+
+                        Socket socket = ss.accept();
+                        log.debug("Got connection from " + socket);
+
+                        SocketChannel sc = socket.getChannel();
+                        sc.configureBlocking(false);
+
+                        sc.register(selector, SelectionKey.OP_READ);
+                    } else if ((selectionKey.readyOps() & SelectionKey.OP_READ) == SelectionKey.OP_READ) {
+                        executor.submit(new ConnectionHandler(ss, selector, selectionKey));
+                        selectionKey.cancel();
+                    }
                 }
 
                 keys.clear();
+
+//                /registerCmd me as user
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -138,64 +186,42 @@ public class MessengerServer {
 
         @Override
         public void run() {
+            SocketChannel sc = null;
             try {
-                if ((key.readyOps() & SelectionKey.OP_ACCEPT) == SelectionKey.OP_ACCEPT) {
+                // It's incoming data on a connection, so process it
+                sc = (SocketChannel) key.channel();
+                Session session = sessions.get(sc);
 
-                    Socket socket = serverSocket.accept();
-                    System.out.println("Got connection from " + socket);
-
-                    SocketChannel sc = socket.getChannel();
-                    sc.configureBlocking(false);
-
-                    //fixme: must be thread safe
-                    // Register it with the selector, for reading
-                    sc.register(selector, SelectionKey.OP_READ);
-                } else if ((key.readyOps() & SelectionKey.OP_READ) == SelectionKey.OP_READ) {
-
-                    SocketChannel sc = null;
-                    try {
-                        // It's incoming data on a connection, so process it
-                        sc = (SocketChannel) key.channel();
-                        Session session = sessions.get(sc);
-
-                        if (session == null) {
-                            session = new Session(sc);
-                            sessions.put(sc, session);
-                        }
-
-                        boolean ok = session.receive();
-
-                        // If the connection is dead, then remove it from sessions and selector and close it
-                        if (!ok) {
-                            sessions.remove(sc);
-
-                            key.cancel();
-                            Socket socket = null;
-                            try {
-                                socket = sc.socket();
-                                socket.close();
-                            } catch (IOException ie) {
-                                System.err.println("Error closing serverSocket " + socket + ": " + ie);
-                            }
-                        }
-
-                    } catch (IOException ie) {
-                        // On exception, remove this channel from the selector
-                        sessions.remove(sc);
-                        key.cancel();
-                        try {
-                            sc.close();
-                        } catch (IOException ie2) {
-                            ie2.printStackTrace();
-                        }
-                        System.out.println("Closed " + sc);
-                    }
+                if (session == null) {
+                    session = new Session(sc);
+                    sessions.put(sc, session);
                 }
-            } catch (ClosedChannelException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+
+                boolean ok = session.receive();
+
+                // If the connection is dead, then remove it from sessions and selector and close it
+                if (ok) {
+                    sc.register(selector, SelectionKey.OP_READ);
+                }
+                if (!ok) {
+                    log.info("Closing session for channel " + sc);
+                    sessions.remove(sc);
+                    sc.close();
+                    log.info("Closed " + sc);
+                }
+
+            } catch (IOException ie) {
+                // On exception, remove this channel from the selector
+                log.error("Closing session for channel " + sc, ie);
+                sessions.remove(sc);
+                try {
+                    sc.close();
+                    log.info("Closed " + sc);
+                } catch (IOException ie2) {
+                    log.error("Error closing channel " + sc, ie2);
+                }
             }
+
         }
 
     }

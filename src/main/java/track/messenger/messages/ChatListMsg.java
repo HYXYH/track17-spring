@@ -8,4 +8,9 @@ public class ChatListMsg extends Message {
     public ChatListMsg() {
         this.setType(Type.MSG_CHAT_LIST);
     }
+
+    @Override
+    public String toString() {
+        return "ChatListMsg{} " + ", Base=" + super.toString() + "}";
+    }
 }
